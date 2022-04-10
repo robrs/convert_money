@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \App\Models\Currency $currency
+ * @var \App\Models\Quotation $currency
  */
 ?>
 

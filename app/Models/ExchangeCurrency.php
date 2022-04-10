@@ -37,11 +37,11 @@ class ExchangeCurrency
     private $conversion_value;
 
     /**
-     * @var Currency $currency
+     * @var Quotation $quotation
      * Recebe a instância da classe Currency
      *
      */
-    private $currency;
+    private $quotation;
 
     /**
      * @var float $purchase_price
@@ -56,12 +56,12 @@ class ExchangeCurrency
 
     /**
      * ExchangeCurrency constructor.
-     * @param Currency $currency
+     * @param Quotation $currency
      * @param float $bid
      */
-    public function __construct($currency, $bid)
+    public function __construct($quotation, $bid)
     {
-        $this->currency = $currency;
+        $this->quotation = $quotation;
         $this->purchase_price = $bid; // valor de compra
         $this->setPaymentRate();
         $this->setConversionRate();
@@ -72,13 +72,13 @@ class ExchangeCurrency
 
     private function setPaymentRate()
     {
-        $this->payment_rate = $this->currency->amount * $this->ratesPaymentType[$this->currency->payment_type];
+        $this->payment_rate = $this->quotation->amount * $this->ratesPaymentType[$this->quotation->payment_type];
     }
 
     private function setConversionRate()
     {
-        $rate = $this->currency->amount <= 3700 ? 0.02 : 0.01;
-        $this->conversion_rate = $this->currency->amount * $rate;
+        $rate = $this->quotation->amount <= 3700 ? 0.02 : 0.01;
+        $this->conversion_rate = $this->quotation->amount * $rate;
     }
 
     private function setUnitValueCurrency()
@@ -88,7 +88,7 @@ class ExchangeCurrency
 
     private function setConversionValue()
     {
-        $this->conversion_value = $this->currency->amount - $this->payment_rate - $this->conversion_rate;
+        $this->conversion_value = $this->quotation->amount - $this->payment_rate - $this->conversion_rate;
     }
 
     private function setValuePurchasedCurrency()
@@ -101,13 +101,13 @@ class ExchangeCurrency
     {
 
         return [
-            'amount' => $this->formatAmount($this->currency->amount),
-            'currency_type' => $this->currency->currency_type,
-            'payment_type' => $this->currency->getPaymentTypes()[$this->currency->payment_type],
+            'amount' => $this->formatAmount($this->quotation->amount),
+            'currency_type' => $this->quotation->currency_type,
+            'payment_type' => $this->quotation->getPaymentTypes()[$this->quotation->payment_type],
             'conversion_rate' => $this->formatAmount($this->conversion_rate),
             'payment_rate' => $this->formatAmount($this->payment_rate),
             'unit_value_currency' => $this->formatAmount($this->unit_value_currency),
-            'value_purchased_currency' => $this->formatAmount($this->value_purchased_currency, $this->currency->currency_type),
+            'value_purchased_currency' => $this->formatAmount($this->value_purchased_currency, $this->quotation->currency_type),
             'conversion_value' => $this->formatAmount($this->conversion_value)
         ];
     }

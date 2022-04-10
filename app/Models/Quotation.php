@@ -3,7 +3,7 @@
 namespace App\Models;
 
 
-class Currency
+class Quotation
 {
 
     /**
