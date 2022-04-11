@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 class ExchangeCurrency
 {
 
@@ -38,8 +37,6 @@ class ExchangeCurrency
 
     /**
      * @var Quotation $quotation
-     * Recebe a instância da classe Currency
-     *
      */
     private $quotation;
 
@@ -49,20 +46,20 @@ class ExchangeCurrency
      */
     private $purchase_price;
 
-    private $ratesPaymentType = [
-        'bb' => 0.0137,
-        'cc' => 0.0773
+    private $paymentMethods = [
+        'bb' => 'BankSlip',
+        'cc' => 'CreditCard'
     ];
 
     /**
      * ExchangeCurrency constructor.
-     * @param Quotation $currency
+     * @param Quotation $quotation
      * @param float $bid
      */
     public function __construct($quotation, $bid)
     {
         $this->quotation = $quotation;
-        $this->purchase_price = $bid; // valor de compra
+        $this->purchase_price = $bid;
         $this->setPaymentRate();
         $this->setConversionRate();
         $this->setUnitValueCurrency();
@@ -72,7 +69,9 @@ class ExchangeCurrency
 
     private function setPaymentRate()
     {
-        $this->payment_rate = $this->quotation->amount * $this->ratesPaymentType[$this->quotation->payment_type];
+        $paymentMethodClass = '\\App\\Services\\' . $this->paymentMethods[$this->quotation->payment_method] . 'PaymentMethodService';
+
+        $this->payment_rate = (new $paymentMethodClass)->calculate($this->quotation->amount);
     }
 
     private function setConversionRate()
@@ -96,37 +95,28 @@ class ExchangeCurrency
         $this->value_purchased_currency = $this->conversion_value * $this->purchase_price;
     }
 
-
-    public function getResult()
+    public function getPaymentRate()
     {
-
-        return [
-            'amount' => $this->formatAmount($this->quotation->amount),
-            'currency_type' => $this->quotation->currency_type,
-            'payment_type' => $this->quotation->getPaymentTypes()[$this->quotation->payment_type],
-            'conversion_rate' => $this->formatAmount($this->conversion_rate),
-            'payment_rate' => $this->formatAmount($this->payment_rate),
-            'unit_value_currency' => $this->formatAmount($this->unit_value_currency),
-            'value_purchased_currency' => $this->formatAmount($this->value_purchased_currency, $this->quotation->currency_type),
-            'conversion_value' => $this->formatAmount($this->conversion_value)
-        ];
+        return $this->payment_rate;
     }
 
-    /**
-     * @param $amount
-     * @param string $currency
-     * @return string
-     */
-    private function formatAmount($amount, $currency = 'BRL')
+    public function getConversionRate()
     {
-        $simbol = [
-            'USD' => 'US$',
-            'EUR' => '€',
-            'BRL' => 'R$',
-            'ARS' => '$'
-        ];
-
-        return $simbol[$currency] .' '. number_format($amount, 2, ',', '.');
+        return $this->conversion_rate;
     }
 
+    public function getUnitValueCurrency()
+    {
+        return $this->unit_value_currency;
+    }
+
+    public function getConversionValue()
+    {
+        return $this->conversion_value;
+    }
+
+    public function getValuePurchasedCurrency()
+    {
+        return $this->value_purchased_currency;
+    }
 }

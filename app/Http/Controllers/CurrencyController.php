@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quotation;
-use App\Models\ExchangeCurrency;
+use App\Services\QuotationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class CurrencyController extends Controller
 {
@@ -13,23 +12,14 @@ class CurrencyController extends Controller
     {
         $quotation = new Quotation();
 
-        $quotation->setAttributes($request->all());
+        $quotationService = new QuotationService($quotation);
 
-        $validate = validator($request->all(), $quotation->rules, [], $quotation->customAttributes);
-
-        if ($validate->fails()) {
-            echo view('errors',['errors' => $validate->errors()->all()]);
+        if($quotationService->processData($request)):
+            echo view('result_table',['data'=>$quotationService->getResult()]);
+        else:
+            echo view('errors',['errors' => $quotationService->getErrors()]);
             exit;
-        }
+        endif;
 
-        $response = Http::withoutVerifying()->get('https://economia.awesomeapi.com.br/json/last/BRL-' . $quotation->currency_type);
-
-        $data = json_decode($response->body());
-
-
-        $exchangeCurrency = new ExchangeCurrency($quotation, $data->BRL->ask);
-
-
-        echo view('result_table',['data'=>$exchangeCurrency->getResult()]);
     }
 }

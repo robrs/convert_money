@@ -3,7 +3,9 @@
 namespace App\Models;
 
 
-class Quotation
+use Illuminate\Database\Eloquent\Model;
+
+class Quotation extends Model
 {
 
     /**
@@ -20,12 +22,12 @@ class Quotation
     /**
      * @var string
      */
-    public $payment_type;
+    public $payment_method;
 
     /**
      * @var array
      */
-    private $paymentTypes = [
+    private $paymentMethods = [
         'bb' => 'Boleto Bancário',
         'cc' => 'Cartão de Crédito'
     ];
@@ -48,23 +50,24 @@ class Quotation
     public $rules = [
         'amount' => ['required',''],
         'currency_type' => 'required',
-        'payment_type' => 'required',
+        'payment_method' => 'required',
     ];
 
     public $customAttributes = [
         'amount' => 'Valor em R$',
         'currency_type' => 'Tipo de Moeda',
-        'payment_type' => 'Forma de pagamento',
+        'payment_method' => 'Forma de pagamento',
 
     ];
 
-    public function getPaymentTypes()
+    public function getPaymentMethods()
     {
-        return $this->paymentTypes;
+        return $this->paymentMethods;
     }
 
     public function getCurrencyTypes()
     {
         return $this->currencyTypes;
     }
+
 }
