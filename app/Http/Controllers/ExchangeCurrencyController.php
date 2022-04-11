@@ -6,7 +6,7 @@ use App\Models\Quotation;
 use App\Services\QuotationService;
 use Illuminate\Http\Request;
 
-class CurrencyController extends Controller
+class ExchangeCurrencyController extends Controller
 {
     public function exchangeCurrency(Request $request)
     {
@@ -14,10 +14,14 @@ class CurrencyController extends Controller
 
         $quotationService = new QuotationService($quotation);
 
-        if($quotationService->processData($request)):
-            echo view('result_table',['data'=>$quotationService->getResult()]);
+        if ($quotationService->processData($request)):
+            echo view('result_table', [
+                'data' => $quotationService->getResult()
+            ]);
         else:
-            echo view('errors',['errors' => $quotationService->getErrors()]);
+            echo view('errors', [
+                'errors' => $quotationService->getErrors()
+            ]);
             exit;
         endif;
 

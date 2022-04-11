@@ -2,26 +2,12 @@
 /**
  * @var array $data
  */
-
-/**
- * [
-'amount' => $this->currency->amount,
-'currency_type' => $this->currency->currency_type,
-'payment_type' => $this->currency->getPaymentTypes()[$this->currency->payment_type],
-'conversion_rate' => $this->conversion_rate,
-'payment_rate' => $this->payment_rate,
-'purchase_price'=>$this->purchase_price,
-'unit_value_currency' => $this->unit_value_currency,
-'value_purchased_currency' => $this->value_purchased_currency,
-'conversion_value' => $this->conversion_value
-];
- */
 ?>
-
+<h4>Resultado</h4>
 <div class="col-md-12">
-    <table class="table table-sm" style="font-size: .8rem">
+    <table class="table table-sm table-bordered" style="font-size: .8rem">
         <thead>
-        <tr>
+        <tr class="table-secondary">
             <th>Valor inicial</th>
             <th>Moeda Destino</th>
             <th>Forma de pagamento</th>
@@ -35,14 +21,14 @@
         </thead>
         <tbody>
         <tr>
-            <td id="amount-in">{{$data['amount']}}</td>
-            <td id="selected-currency-type-to">{{$data['currency_type']}}</td>
-            <td id="selected-payment-type">{{$data['payment_type']}}</td>
-            <td id="value-currency-unit">{{$data['unit_value_currency']}}</td>
-            <td id="value-buy-currency-to">{{$data['value_purchased_currency']}}</td>
-            <td id="rate-payment">{{$data['payment_rate']}}</td>
-            <td id="rate-conversion">{{$data['conversion_rate']}}</td>
-            <td id="used-value-conversion">{{$data['conversion_value']}}</td>
+            <td>{{$data['amount']}}</td>
+            <td>{{$data['currency_type']}}</td>
+            <td>{{$data['payment_type']}}</td>
+            <td>{{$data['unit_value_currency']}}</td>
+            <td>{{$data['value_purchased_currency']}}</td>
+            <td>{{$data['payment_rate']}}</td>
+            <td>{{$data['conversion_rate']}}</td>
+            <td>{{$data['conversion_value']}}</td>
         </tr>
         </tbody>
     </table>

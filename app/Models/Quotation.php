@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class Quotation extends Model
@@ -27,47 +26,36 @@ class Quotation extends Model
     /**
      * @var array
      */
-    private $paymentMethods = [
-        'bb' => 'Boleto Bancário',
-        'cc' => 'Cartão de Crédito'
-    ];
-
-    private $currencyTypes = [
-        'USD' => 'Dólar Americano',
-        'EUR' => 'Euro',
-        'ARS' => 'Peso Argentino'
-    ];
+    public $attributes = [];
 
     public function setAttributes($attributes = [])
     {
+
         if (count($attributes) > 0):
             foreach ($attributes as $key => $value):
                 $this->$key = $value;
+                $this->attributes[$key] = $value;
             endforeach;
         endif;
     }
 
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
     public $rules = [
-        'amount' => ['required',''],
+        'amount' => ['required', 'numeric'],
         'currency_type' => 'required',
         'payment_method' => 'required',
     ];
 
     public $customAttributes = [
-        'amount' => 'Valor em R$',
+        'amount' => 'Valor em BRL',
         'currency_type' => 'Tipo de Moeda',
         'payment_method' => 'Forma de pagamento',
 
     ];
 
-    public function getPaymentMethods()
-    {
-        return $this->paymentMethods;
-    }
-
-    public function getCurrencyTypes()
-    {
-        return $this->currencyTypes;
-    }
 
 }

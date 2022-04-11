@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\ExchangeCurrencyController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +18,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::post('/currency',[CurrencyController::class,'exchangeCurrency']);
+Route::post('/currency',[ExchangeCurrencyController::class,'exchangeCurrency']);
 

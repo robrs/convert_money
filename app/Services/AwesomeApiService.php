@@ -15,7 +15,7 @@ class AwesomeApiService
      */
     public static function getLast($type)
     {
-        $response = Http::withoutVerifying()->get(self::BASE_URL.'/json/last/BRL-' . $type);
+        $response = Http::withoutVerifying()->get(self::BASE_URL . '/json/last/BRL-' . $type);
 
         return json_decode($response->body());
     }
