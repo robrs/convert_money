@@ -68,19 +68,23 @@ class QuotationService
         return true;
     }
 
+    private function validateAmountMinMax($amount)
+    {
+        if (empty($amount)):
+            return true;
+        elseif ($amount >= 1000 && $amount <= 100000):
+            return true;
+        else:
+            $this->setErrors(['O Valor inicial em BRL deve ser entre R$ 1000,00 e R$ 100.000,00']);
+            return false;
+
+        endif;
+
+    }
+
     private function setErrors($errors)
     {
         $this->errors = array_merge($this->errors, $errors);
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    public function getResult()
-    {
-        return $this->result;
     }
 
     /**
@@ -100,7 +104,6 @@ class QuotationService
         ];
     }
 
-
     /**
      * @param $amount
      * @param string $currency
@@ -111,18 +114,14 @@ class QuotationService
         return QuotationUtilsService::formatAmount($amount, $currency);
     }
 
-    private function validateAmountMinMax($amount)
+    public function getErrors()
     {
-        if (empty($amount)):
-            return true;
-        elseif ($amount >= 1000 && $amount <= 100000):
-            return true;
-        else:
-            $this->setErrors(['O Valor inicial em BRL deve ser entre R$ 1000,00 e R$ 100.000,00']);
-            return false;
+        return $this->errors;
+    }
 
-        endif;
-
+    public function getResult()
+    {
+        return $this->result;
     }
 
 }

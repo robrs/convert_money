@@ -27,6 +27,22 @@ class Quotation extends Model
      * @var array
      */
     public $attributes = [];
+    public $rules = [
+        'amount' => ['required', 'numeric'],
+        'currency_type' => 'required',
+        'payment_method' => 'required',
+    ];
+    public $customAttributes = [
+        'amount' => 'Valor em BRL',
+        'currency_type' => 'Tipo de Moeda',
+        'payment_method' => 'Forma de pagamento',
+
+    ];
+
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 
     public function setAttributes($attributes = [])
     {
@@ -38,24 +54,6 @@ class Quotation extends Model
             endforeach;
         endif;
     }
-
-    public function getAttributes()
-    {
-        return $this->attributes;
-    }
-
-    public $rules = [
-        'amount' => ['required', 'numeric'],
-        'currency_type' => 'required',
-        'payment_method' => 'required',
-    ];
-
-    public $customAttributes = [
-        'amount' => 'Valor em BRL',
-        'currency_type' => 'Tipo de Moeda',
-        'payment_method' => 'Forma de pagamento',
-
-    ];
 
 
 }

@@ -6,53 +6,46 @@ class ExchangeCurrency
 {
 
     /**
-     * @var float $payment_fee
-     *  Taxa de pagemento
-     */
-    private $payment_fee;
-
-    /**
-     * @var float $conversion_fee
-     *  Taxa de conversão
-     */
-    private $conversion_fee;
-
-    /**
-     * @var float $unit_value_currency
-     * Valor unitário da moeda destino
-     */
-    private $unit_value_currency;
-
-    /**
-     * @var float $value_purchased_currency
-     *  Valor comprado da moeda destino
-     */
-    private $value_purchased_currency;
-
-    /**
-     * @var float $conversion_value
-     *  Valor utilizado para conversão
-     */
-    private $conversion_value;
-
-    /**
-     * @var Quotation $quotation
-     */
-    private $quotation;
-
-    /**
-     * @var float $purchase_price
-     *  Valor de compra da moeda destino
-     */
-    private $purchase_price;
-
-    /**
      *
      */
     const  PAYMENT_METHODS = [
         'bb' => 'BankSlip',
         'cc' => 'CreditCard'
     ];
+    /**
+     * @var float $payment_fee
+     *  Taxa de pagemento
+     */
+    private $payment_fee;
+    /**
+     * @var float $conversion_fee
+     *  Taxa de conversão
+     */
+    private $conversion_fee;
+    /**
+     * @var float $unit_value_currency
+     * Valor unitário da moeda destino
+     */
+    private $unit_value_currency;
+    /**
+     * @var float $value_purchased_currency
+     *  Valor comprado da moeda destino
+     */
+    private $value_purchased_currency;
+    /**
+     * @var float $conversion_value
+     *  Valor utilizado para conversão
+     */
+    private $conversion_value;
+    /**
+     * @var Quotation $quotation
+     */
+    private $quotation;
+    /**
+     * @var float $purchase_price
+     *  Valor de compra da moeda destino
+     */
+    private $purchase_price;
 
     /**
      * ExchangeCurrency constructor.

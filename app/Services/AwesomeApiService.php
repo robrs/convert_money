@@ -20,9 +20,9 @@ class AwesomeApiService
 
         $data = json_decode($response->body());
 
-        return (object) [
-            'status'=>$response->status(),
-            'data' => isset($data->BRL) ? $data->BRL: $data
+        return (object)[
+            'status' => $response->status(),
+            'data' => isset($data->BRL) ? $data->BRL : $data
         ];
 
     }
