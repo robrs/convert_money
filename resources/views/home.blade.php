@@ -25,7 +25,6 @@
     <div class="card card-light">
         <div class="card-header">
             <form id="quotation-form">
-                @csrf
                 <div class="row">
                     <div class="col-md-4">
                         <label for="titulo">Valor em BRL:</label>
@@ -77,9 +76,7 @@
         </div>
 
         <div class="card-footer">
-            <ul class="small">
-                <li>O Valor inicial em BRL deve ser entre R$ 1000,00 e R$ 100.000,00</li>
-            </ul>
+
         </div>
     </div>
     <hr>

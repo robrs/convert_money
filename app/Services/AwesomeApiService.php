@@ -13,10 +13,17 @@ class AwesomeApiService
      * @param $type
      * @return mixed|Object
      */
-    public static function getLast($type)
+    public static function getLastBRL($type)
     {
+
         $response = Http::withoutVerifying()->get(self::BASE_URL . '/json/last/BRL-' . $type);
 
-        return json_decode($response->body());
+        $data = json_decode($response->body());
+
+        return (object) [
+            'status'=>$response->status(),
+            'data' => isset($data->BRL) ? $data->BRL: $data
+        ];
+
     }
 }

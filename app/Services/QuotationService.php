@@ -7,6 +7,7 @@ use App\Models\ExchangeCurrency;
 use App\Models\Quotation;
 use Illuminate\Http\Request;
 
+
 class QuotationService
 {
 
@@ -38,13 +39,13 @@ class QuotationService
     {
 
         $attributes = $request->all();
-        // tratar o campo amount recebido do formulário
         $attributes['amount'] = QuotationUtilsService::formatAmountFromForm($attributes['amount']);
+
         $this->quotation->setAttributes($attributes);
 
         $validate = validator($attributes, $this->quotation->rules, [], $this->quotation->customAttributes);
 
-        if (!$this->validadeAmountMinMax($this->quotation->amount)) {
+        if (!$this->validateAmountMinMax($this->quotation->amount)) {
             return false;
         }
 
@@ -52,9 +53,15 @@ class QuotationService
             $this->setErrors($validate->errors()->all());
             return false;
         }
-        $response = AwesomeApiService::getLast($this->quotation->currency_type);
 
-        $exchangeCurrency = new ExchangeCurrency($this->quotation, $response->BRL->ask);
+        $currency = AwesomeApiService::getLastBRL($this->quotation->currency_type);
+
+        if ($currency->status != '200') {
+            $this->setErrors([$currency->data->message]);
+            return false;
+        }
+
+        $exchangeCurrency = new ExchangeCurrency($this->quotation, $currency->data->ask);
 
         $this->setResult($exchangeCurrency);
 
@@ -85,8 +92,8 @@ class QuotationService
             'amount' => $this->formatAmount($this->quotation->amount),
             'currency_type' => $this->quotation->currency_type,
             'payment_type' => QuotationUtilsService::getPaymentMethods()[$this->quotation->payment_method],
-            'conversion_rate' => $this->formatAmount($exchangeCurrency->getConversionRate()),
-            'payment_rate' => $this->formatAmount($exchangeCurrency->getPaymentRate()),
+            'conversion_rate' => $this->formatAmount($exchangeCurrency->getConversionFee()),
+            'payment_rate' => $this->formatAmount($exchangeCurrency->getPaymentFee()),
             'unit_value_currency' => $this->formatAmount($exchangeCurrency->getUnitValueCurrency()),
             'value_purchased_currency' => $this->formatAmount($exchangeCurrency->getValuePurchasedCurrency(), $this->quotation->currency_type),
             'conversion_value' => $this->formatAmount($exchangeCurrency->getConversionValue())
@@ -104,7 +111,7 @@ class QuotationService
         return QuotationUtilsService::formatAmount($amount, $currency);
     }
 
-    private function validadeAmountMinMax($amount)
+    private function validateAmountMinMax($amount)
     {
         if (empty($amount)):
             return true;

@@ -6,16 +6,16 @@ class ExchangeCurrency
 {
 
     /**
-     * @var float $payment_rate
+     * @var float $payment_fee
      *  Taxa de pagemento
      */
-    private $payment_rate;
+    private $payment_fee;
 
     /**
-     * @var float $conversion_rate
+     * @var float $conversion_fee
      *  Taxa de conversão
      */
-    private $conversion_rate;
+    private $conversion_fee;
 
     /**
      * @var float $unit_value_currency
@@ -46,7 +46,10 @@ class ExchangeCurrency
      */
     private $purchase_price;
 
-    private $paymentMethods = [
+    /**
+     *
+     */
+    const  PAYMENT_METHODS = [
         'bb' => 'BankSlip',
         'cc' => 'CreditCard'
     ];
@@ -60,24 +63,24 @@ class ExchangeCurrency
     {
         $this->quotation = $quotation;
         $this->purchase_price = $bid;
-        $this->setPaymentRate();
-        $this->setConversionRate();
+        $this->setPaymentFee();
+        $this->setConversionFee();
         $this->setUnitValueCurrency();
         $this->setConversionValue();
         $this->setValuePurchasedCurrency();
     }
 
-    private function setPaymentRate()
+    private function setPaymentFee()
     {
-        $paymentMethodClass = '\\App\\Services\\' . $this->paymentMethods[$this->quotation->payment_method] . 'PaymentMethodService';
+        $paymentMethodClass = '\\App\\Services\\' . self::PAYMENT_METHODS[$this->quotation->payment_method] . 'PaymentMethodService';
 
-        $this->payment_rate = (new $paymentMethodClass)->calculate($this->quotation->amount);
+        $this->payment_fee = (new $paymentMethodClass)->calculate($this->quotation->amount);
     }
 
-    private function setConversionRate()
+    private function setConversionFee()
     {
-        $rate = $this->quotation->amount <= 3700 ? 0.02 : 0.01;
-        $this->conversion_rate = $this->quotation->amount * $rate;
+        $fee = $this->quotation->amount <= 3700 ? 0.02 : 0.01;
+        $this->conversion_fee = $this->quotation->amount * $fee;
     }
 
     private function setUnitValueCurrency()
@@ -87,7 +90,7 @@ class ExchangeCurrency
 
     private function setConversionValue()
     {
-        $this->conversion_value = $this->quotation->amount - $this->payment_rate - $this->conversion_rate;
+        $this->conversion_value = $this->quotation->amount - $this->payment_fee - $this->conversion_fee;
     }
 
     private function setValuePurchasedCurrency()
@@ -95,14 +98,14 @@ class ExchangeCurrency
         $this->value_purchased_currency = $this->conversion_value * $this->purchase_price;
     }
 
-    public function getPaymentRate()
+    public function getPaymentFee()
     {
-        return $this->payment_rate;
+        return $this->payment_fee;
     }
 
-    public function getConversionRate()
+    public function getConversionFee()
     {
-        return $this->conversion_rate;
+        return $this->conversion_fee;
     }
 
     public function getUnitValueCurrency()
