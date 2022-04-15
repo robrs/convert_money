@@ -8,7 +8,7 @@ function exchange() {
     const payment_method = document.getElementById('payment-method').value;
     const currency_type = document.getElementById('currency-type').value;
 
-    axios.post('/currency', {amount, payment_method, currency_type, token})
+    axios.post('/currency', {amount, payment_method, currency_type})
         .then(function (response) {
           document.getElementById('result').innerHTML = response.data;
         });
