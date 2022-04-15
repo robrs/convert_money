@@ -19,10 +19,10 @@ class AwesomeApiService
         $response = Http::withoutVerifying()->get(self::BASE_URL . '/json/last/BRL-' . $type);
 
         $data = json_decode($response->body());
-
+        $type = 'BRL' . $type;
         return (object)[
             'status' => $response->status(),
-            'data' => isset($data->BRL) ? $data->BRL : $data
+            'data' => isset($data->$type) ? $data->$type : $data
         ];
 
     }
