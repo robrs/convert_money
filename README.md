@@ -2,6 +2,8 @@
 
 ## Usage
 
+copy the .env.example file and rename it to .env
+
 composer install
 
 npm install
